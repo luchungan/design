@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实现一个ajax</title>
+</head>
+
+<body>
+    <script>
+        function ajax(option) {
+            var xhr = null
+            if (window.XMLHttpRequest) {
+                xhr = new XMLHttpRequest()
+            } else {
+                xhr = new ActiveXObject("Microsoft.XMLHTTP")
+            }
+
+
+            if(option.type == "GET"){
+                xhr.open(option.type,option.url+'?'+formsParam(option.data),option.async)
+                xhr.send(null)
+            }else if(option.type == "POST"){
+                xhr.open(option.type,option.url,option.async)
+                xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+                xhr.send(formsParam(option.data))
+            }
+
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4 && xhr.status == 200){
+                    option.success(xhr.responseText)
+                }
+            }
+
+            function formsParam(data){
+                var arr = []
+                for(var prop in data){
+                    arr.push(prop + '=' + data[prop])
+                }
+                return arr.join('&')
+            }
+        }
+
+        ajax({
+            type:"POST",
+            url:'https://api.apiopen.top/searchAuthors',
+            async:true,
+            data:{name:'libai'},
+            success:function(data){
+                console.log(data)
+            }
+        })
+        // console.log(xhr)
+    </script>
+</body>
+
+</html>
