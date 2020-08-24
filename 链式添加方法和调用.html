@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>链式添加方法和链式调用</title>
+</head>
+<body>
+
+	<script>
+	// Function.portotype.addMethod=function(name,fn){
+	// 	this[name]=fn;
+	// 	//return this;
+	// }
+	// var f=new Function();
+	// f.addMethod('say',function(){alert('say');});
+	// f.say()//.run();
+	// 
+	// 
+	// 
+	// 函数式调用
+	// Function.prototype.addMethod=function(name,fn){
+	// 	this[name]=fn;
+
+	// 	return this;
+	// }
+	// var f =new Function();
+	// f.addMethod('say',function(){alert("say");return this}).addMethod('run',function(){alert('run'); return this;});
+	// f.say().run();
+	// f.run();
+	// 
+	// 
+	// 
+	// 
+	// 类式调用
+	Function.prototype.addMethod=function(name,fn){
+		this.prototype[name]=fn;
+		return this;
+	}
+	var F = function(){}
+	F.addMethod('say',function(){alert('say')}).addMethod('run',function(){alert('run')})
+	var say =new F();
+	var run = new F();
+	say.say();
+	run.run();
+	</script>
+	
+</body>
+</html>

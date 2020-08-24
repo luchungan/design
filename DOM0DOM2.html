@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>DOM0DOM2</title>
+</head>
+<body>
+	<button id="btn" onclick="fn()"">btn</button>
+	<script>
+	var btn=document.getElementById('btn');
+	btn.addEventListener('click',function(){
+		console.log('dom2--1')
+	})
+	function fn(){
+		console.log('fn')
+	}
+	
+	btn.onclick=function(){
+		console.log('js中dom0')
+	}
+	btn.onclick=function(){
+		console.log('js中dom0_2')    //dom0事件会依次覆盖
+	}
+	btn.addEventListener('click',function(){
+		console.log('dom2')
+	})
+	btn.addEventListener('click',function(){
+		console.log('dom2——2')      //dom2事件不会覆盖任何事件
+	})
+	</script>
+	
+</body>
+</html>

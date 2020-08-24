@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>多继承-深度复制</title>
+</head>
+<body>
+<script>
+
+function extendDeep(child , parent){
+	parent=parent||{};
+	for (var property in parent){
+		if(parent.hasOwnProperty(property)){
+		if(typeof parent[property] === 'object'){
+			child[property] = (parent[property].toString=="[object Array]")?[]:{};
+			extendDeep(child[property] , parent[property])
+		}else{
+			child[property] = parent[property]
+		}
+		}
+	}
+	return child;
+}
+
+var book1={
+	name:'book1',
+	mode:['js','nodejs','menujs']
+	//menu:{'say',1,2}
+}
+var book2={
+	book:1
+}
+var book3=extendDeep(book2,book1);
+//console.log(book3);
+
+
+
+function mixDeep(){
+	var target=arguments[0],
+		i=1,arg,len=arguments.length,child;
+		for(;i<len;i++){
+			arg=arguments[i];
+				target=extendDeep(target,arg);
+				
+			}
+			return target;
+		}
+ var book4={
+ 	na:'he',
+ 	me:['h','e','l'],
+ 	nam:{paper:'pa',papp:'papp'}
+ }
+ //console.log(mixDeep(book1,book2,book4))
+
+
+
+
+ function j_extendDeep(child ,father){
+ 	var i ,proxy;
+ 	proxy=JSON.parse(JSON.stringify(father));//father的一个副本
+ 	for(i in proxy){
+ 		if(child.hasOwnProperty(i)){
+ 		child[i]=proxy[i];
+ 		}
+ 	}return child;
+ }
+ console.log(j_extendDeep(book2 ,book1))
+</script>
+	
+	
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>简单工厂模式</title>
+</head>
+<body>
+<script>
+	var Basketball=function(){
+		this.intro="篮球盛行于美国";
+	}
+	Basketball.prototype={
+		getMember:function(){
+			console.log('篮球队有五个人')
+		},
+		getNum:function(){
+			console.log('篮球很大')	
+		}
+	}
+
+	var Football=function(){
+		this.intro="足球很流行"
+	}	
+	Football.prototype={
+		getMember:function(){
+			console.log('足球人多')
+		},
+		getNum:function(){
+			console.log('足球很大')
+		}	
+	}
+
+
+	var SportFactory=function(name){
+		switch(name){
+			case 'NBA' :return new Basketball();
+			case 'WordCup' :return new Football();
+
+		}
+
+	}
+
+	var football=SportFactory('NBA')
+	football.getMember()
+
+
+
+	function createSport(name ,time ,type){
+		var o = SportFactory(name);
+		o.time=time;
+		o.type=type;
+		return o;
+	}
+	var foot=createSport('NBA',10,10)
+	console.log(foot)
+</script>
+	
+	
+</body>
+</html>

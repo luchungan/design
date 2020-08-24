@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>单继承多继承</title>
+</head>
+<body>
+<script>
+function extend(target , source){
+	for(var property in source){
+		target[property]=source[property]
+
+	}
+	return target;
+}
+var book1={
+	name:'book1',
+	age:3
+}
+var book2={
+	sex:'boy'
+}
+var book3=extend(book2 ,book1);
+console.log(book3)
+
+
+
+function mix(){
+	var len=arguments.length,arg,i=1,target=arguments[0];
+	for(;i<len;i++){
+		arg=arguments[i];
+		for(var property in arg){
+			target[property]=arg[property];
+		}
+		return target;
+	}
+}
+var book4={
+	a:1,b:2,c:3
+}
+var book5=mix(book4,book2,book1);
+console.log(book5);
+</script>
+	
+</body>
+</html>

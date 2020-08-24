@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>桥接模式</title>
+	<style>
+	.nav{
+		background-color: pink;
+		width: 100%;
+		height: 30px;
+	}
+		.nav-ul>li{
+			float: left;
+			width: 150px;
+			height: 30px;
+			line-height: 30px;
+			font-size: 12px;
+			color:#a9a9a9;
+			list-style: none;
+			border: 1px solid red;
+			background-color: green;
+		}
+		.nav-ul>li>span{
+			width:100%;
+			height: 100%;
+			display: block;
+		}
+	</style>
+</head>
+<body>
+<div class="nav">
+	<ul class="nav-ul">
+		<li>
+			<span>雨夜清荷</span>
+		</li>
+		<li>
+			<span><strong>等级</strong>&nbsp&nbsp9</span>
+		</li>
+		<li>
+			<span><strong>消息</strong>&nbsp&nbsp5</span>
+		</li>
+	</ul>
+</div>
+	<script>
+	var changeColor=function(dom ,color,bg){
+		dom.style.color=color;
+		dom.style.background=bg;
+	}
+	var spans=document.getElementsByTagName('span')
+	spans[0].onmouseover=function(){
+		changeColor(this ,'red' ,'#ddd')
+	}
+	spans[0].onmouseout=function(){
+		changeColor(this ,'#333' ,'#f5f5f5')
+	}
+		spans[1].onmouseover=function(){
+		changeColor(this.getElementsByTagName('strong')[0] ,'red' ,'#ddd')
+	}
+	spans[1].onmouseout=function(){
+		changeColor(this.getElementsByTagName('strong')[0] ,'#333' ,'#f5f5f5')
+	}
+		spans[2].onmouseover=function(){
+		changeColor(this.getElementsByTagName('strong')[0] ,'red' ,'#ddd')
+	}
+	spans[2].onmouseout=function(){
+		changeColor(this.getElementsByTagName('strong')[0] ,'#333' ,'#f5f5f5')
+	}
+
+
+
+
+
+	//创建一个桥接method，实现对对象拓展方法的功能
+	Object.prototype.addMethod=function(name ,fn){
+		this[name]=fn;
+	}
+	var OB=function(){
+
+	}
+	var ob=new OB();
+	ob.addMethod('say',function(){
+		console.log('say');
+	})
+	//ob.say();
+
+	//第二种
+	var addMethod1=function(name,fn){
+		this[name]=fn;
+	}
+	var ob1={};
+	addMethod1.call(ob1 ,'say' ,function(){
+		console.log('say1')
+	})
+	ob1.say();
+	</script>
+</body>
+</html>

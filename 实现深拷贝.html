@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深拷贝</title>
+</head>
+<body>
+    <script>
+        //只拷贝一层
+        var obj1 = {
+            name:'lily',
+            age:18
+        }
+        let obj2 = Object.assign({},obj1)
+        obj1.name='lucy'
+        console.log(obj2.name) //lily  
+
+        //多层嵌套
+        var obj3 = {
+            name:'lily',
+            age:18,
+            hobby:['sing','swimming','danceing']
+        }
+        let obj4 = Object.assign({},obj3)
+        obj3.hobby[1]='song'
+        console.log(obj4.hobby[1]) //song  未能实现深拷贝
+        
+        let obj5 = JSON.parse(JSON.stringify(obj3))
+        obj3.hobby[2]='swim'
+        console.log(obj5.hobby[2]) //danceing  实现了深度拷贝
+
+        //JSON方法不能拷贝函数
+
+        var obj6 = {
+            name:'lily',
+            age:18,
+            hobby:['sing','swimming',{key1:'dance',key2:'watching'}],
+            speak:function(){
+                console.log(this)
+            }
+        }
+
+        try{
+            let obj7 = JSON.parse(JSON.stringify(obj6))
+            console.log(obj7.speak)  //undefined
+        }catch(e){
+            console.error(e)
+        }
+
+        // 实现deepClone方法
+        function deepClone(obj){
+            let newObj = Array.isArray(obj)?[]:{}
+            //obj是基础类型
+            if(typeof obj !== 'object'){
+                return newObj = obj
+            }
+            // obj是数组
+            if(obj instanceof Array){
+                for(var i =0 ;i<obj.length ; i++){
+                    if(typeof obj[i] != 'object'){
+                        newObj[i] = obj[i]
+                    }else if(typeof obj[i] == 'object'){
+                        newObj[i] = deepClone(obj[i])
+                    }
+                }
+            }else{
+                for(var key in obj){
+                    if(obj.hasOwnProperty(key)){
+                        if(typeof obj[key] == 'object'){
+                            newObj[key] = deepClone(obj[key])
+                        }else{
+                            newObj[key] = obj[key]
+                        }
+                    }
+                }
+            }
+            return newObj
+
+        }
+
+        let obj8 = deepClone(obj6)
+        obj6.hobby = [1,2,3]    
+        console.log(obj8.hobby) //['sing','swimming',{key1:'dance',key2:'watching'}]
+    </script>
+</body>
+</html>

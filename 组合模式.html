@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>组合模式</title>
+</head>
+<body>
+
+	<form action="">
+		<fieldset>
+		<legend>账号</legend>
+		<div><label for="user_name">用户名：</label>
+		<input type="text" id="user_name">
+		<span>4到6位数字或字母</span></div>
+		
+		</fieldset>
+	</form>
+	<script>
+	var inheritObject=function(o){
+		var F=function(){}
+		F.prototype=o;
+		return new F();//new F()._proto_=o
+	}
+	var inheritPrototype=function(subClass, superClass){
+		var p=inheritObject(superClass.prototype)//p._proto_=superClass.prototype
+		p.constructor=subClass;
+		subClass.prototype=p;//subClass._proto_=p
+		console.log(p)
+	}
+	//定义抽象父类	
+	var News=function(){
+		this.children = [];
+		this.element = null;
+	}
+	News.prototype = {
+		init : function(){
+			throw new Error("请重写此方法	")
+		},
+		add : function(){
+			throw new Error('请重写此方法')
+		},
+		getElement : function(){
+			throw new Error("请重写此方法")
+		},
+		say:function(){}
+	}
+
+	//容器类构造函数
+	var Container = function(id ,parent){
+		News.call(this);
+		this.id=id;
+		this.parent=parent;
+		this.init();
+	}
+	inheritPrototype(Container ,News);
+	Container.prototype.init=function(){
+		this.element=document.createElement('ul');
+		this.element.id=this.id;
+		this.element.className='new-container'
+		return this;
+	}
+	Container.prototype.getElement = function(){
+		return this.element;
+	}
+	Container.prototype.add=function(child){
+		this.children.push(child);
+		this.element.appendChild(child.getElement())
+		return this;
+	}
+	Container.prototype.show=function(){
+		this.parent.appendChild(this.element)
+	}
+	console.log(new Container('11','body'));
+	//行成员集合类
+	var Item=function(classname){
+		News.call(this);
+		this.className=classname||'';
+		this.init();
+	}
+	inheritPrototype(Item ,News);
+	Item.prototype.init=function(){
+		this.element=document.createElement('li');
+		this.element.className=this.className;
+	}
+	Item.prototype.add = function(child){
+		this.children.push(child);
+		this.element.appendChild(child.getElement());
+		return this;
+	}
+	Item.prototype.getElement=function(){
+		return this.element;
+	}
+
+	//组合成员集合类
+	var NewsGroup=function(classname){
+		News.call(this);
+		this.className=classname||'';
+		this.init();
+	}
+	inheritPrototype(NewsGroup ,News);
+	NewsGroup.prototype.init=function(){
+		this.element=document.createElement('li');
+		this.element.className=this.className;
+	}
+	NewsGroup.prototype.add = function(child){
+		this.children.push(child);
+		this.element.appendChild(child.getElement());
+		return this;
+	}
+	NewsGroup.prototype.getElement=function(){
+		return this.element;
+	}
+
+
+	//新闻类
+	var ImageNews = function(url ,href, classname){
+		News.call(this);
+		this.url =url || '';
+		this.href=href || '';
+		this.classname= classname || 'normal';
+		this.init();
+	}
+	inheritPrototype(ImageNews ,News);
+	ImageNews.prototype.init=function(){
+		this.element=document.createElement('a')
+		var img=new Image();
+		img.src=this.url;
+		this.element.appendChild(img)
+		this.element.href=this.href;
+		this.element.className='image-news '+ this.classname;
+	}
+	ImageNews.prototype.add=function(){}
+	ImageNews.prototype.getElement=function(){
+		return this.element;
+	}
+	//标签类
+	var IconNews=function(text ,href ,type){
+		News.call(this)
+		this.text=text;
+		this.href=href;
+		this.type=type;
+		this.init();
+	}
+	inheritPrototype(IconNews ,News);
+	IconNews.prototype.init=function(){
+		this.element=document.createElement('a');
+		this.element.innerHTML = this.text;
+		this.element.href=this.href;
+		this.element.className='icon '+this.type;
+	}
+	IconNews.prototype.add=function(){}
+	IconNews.prototype.getElement=function(){
+		return this.element;
+	}
+	var news1 = new Container('new' ,document.body);
+	news1.add(
+		new Item('normal').add(
+				new IconNews('梅西不拿进球也尾巴' ,"#" ,'video')
+			).add(
+				new NewsGroup('has-img').add(
+						new ImageNews('./image/load.jpg','#', 'small')
+					)
+			)
+		).show()
+	</script>
+	
+</body>
+</html>

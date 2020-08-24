@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test</title>
+</head>
+<body>
+	<div id="div" style="width:100px;height: 100px;background-color: red"></div>
+<script type="text/javascript">
+	var bindIEEvent=function(dom ,type ,data ,fn){
+		data=data||{};
+		dom.attachEvent('on'+type ,function(e){
+			fn.call(dom ,e ,data)
+		})
+	}
+	var bindChremeEvent=function(dom ,type ,data ,fn){
+		data=data||{};
+		dom.addEventListener(type ,function(e){
+			fn.call(dom ,e ,data)
+		})
+		
+	}
+	var bindEvent=function(dom ,type ,data ,fn){
+		var dom = document.getElementById(dom)
+		if(addEventListener){
+			bindChremeEvent(dom ,type ,data ,fn)
+		}else if(attachEvent){
+			bindIEEvent(dom ,type ,data ,fn)
+		}else{
+			dom['on'+type]=fn
+		}
+	}
+
+	var $ =function(dom){
+		return document.getElementById(dom)
+	}
+	bindEvent('div' ,'click' ,{name:'lily'} ,function(e ,d){
+		console.log(this)
+		console.log(e)
+		console.log(d)
+	})
+
+
+
+
+	var Visitor=(function(){
+		return {
+			splice : function(){
+				var args=Array.prototype.splice.call(arguments ,1)
+				return Array.prototype.splice.apply(arguments[0],args)//splice有两个参数
+			},
+			push : function(){
+				var len=arguments[0].length||0;
+				var args=this.splice(arguments ,1);
+				 arguments[0].length=len + arguments.length-1;
+				return Array.prototype.push.apply(arguments[0],args)
+			},
+			pop : function(){
+				return Array.prototype.pop.apply(arguments[0])
+			}
+		}
+	})()
+	var a =new Object;
+	console.log(a.length)
+	Visitor.push(a,1,2,3)
+	Visitor.push(a,1,2,3)
+	console.log(a)
+	Visitor.pop(a)
+	console.log(a)
+	Visitor.splice(a,1)
+	console.log(a)
+</script>
+</body>
+</html>

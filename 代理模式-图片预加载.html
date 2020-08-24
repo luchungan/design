@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>代理模式-图片预加载</title>
+</head>
+<body>
+	<button id='btn'>加载图片</button>
+	<div id="imgcontainer"></div>
+	<script src="js/jQuery.js"></script>
+	<script>
+		$(function(){
+			$('#btn').bind('click',doLoadImg)
+		});
+		function doLoadImg(){
+			var eleImg = createImgElement();
+			document.getElementById('imgcontainer').appendChild(eleImg);
+			loadImgProxy(eleImg,'image/big.jpg');
+		}
+		var createImgElement=(function(){
+			var index=0;
+			return function(){
+				var img=document.createElement('img');
+				img.setAttribute('width','200px')
+				img.setAttribute('height','200px')
+				img.setAttribute('id','img'+index++);
+				return img;
+			}
+		})()
+		function loadImg(img ,src){
+				img.src=src;
+			}
+			var loadImgProxy = (function(){
+				var imgCache = new Image();
+				return function (img ,src){
+					imgCache.onload = function(){
+						loadImg(img, this.src)
+					}
+					loadImg(img ,'image/load.jpg');
+					imgCache.src = src;
+				}
+			})()
+	</script>
+</body>
+</html>

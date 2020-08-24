@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>图片预加载</title>
+</head>
+<body>
+
+	<button id="btn">加载图片</button>
+	<div id="imgContainer"></div>
+	<script src="js/jQuery.js"></script>
+	<script>
+	$(function(){
+		$('#btn').bind('click',doLoadImg);
+	})
+	var doLoadImg = function(){
+		var eleImg=createImg();
+		document.getElementById('imgContainer').appendChild(eleImg);
+		loadImgProxy(eleImg,'image/big.jpg' ,'image/load.jpg')
+	}
+	//创建img标枪
+	var createImg=(function(){
+		var index = 0;
+		return function(){
+			var Img=document.createElement('img');
+			Img.setAttribute('width','200px');
+			Img.setAttribute('height','200px');
+			Img.setAttribute('id','img'+index++);
+			return Img;
+		}
+	})()
+	//加载图片	
+	var loadImg=function(img ,src){
+		img.src=src
+	}
+
+	//代理模式加载预览图片
+	var loadImgProxy=(function(img ,src ,load){
+		var imgCache=new Image();
+		return function(img ,src ,load){
+			//imgCache的图片加载好了，给img换掉
+			imgCache.onload=function(){
+				loadImg(img ,this.src)
+			}
+			loadImg(img ,load)
+			loadImg(imgCache ,src);
+		}
+	})()
+	</script>
+</body>
+</html>

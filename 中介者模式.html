@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>中介者模式</title>
+</head>
+<body>
+	<button id="show_btn">show</button><button id="hide_btn">hide</button>
+	<script type="text/javascript">
+		var Midiator=(function(){
+			var _msg={}
+			return{
+				register:function(type ,action){
+					if(_msg[type]){
+						_msg[type].push(action)
+					}else{
+						_msg[type]=[]
+						_msg[type].push(action)
+					}
+							},
+					send:function(type){
+						if(_msg[type]){
+							for(var i=0,len=_msg[type].length;i<len;i++){
+								_msg[type][i]&&_msg[type][i]()
+						}
+					}
+				}
+			}
+		})()
+
+		var showHideNavWidget=function(dom ,tag ,showOrHide){
+			var dom =document.getElementById(dom);
+			var	tag = document.getElementsByTagName(tag);
+			var	showOrHide=(!showOrHide || showOrHide == 'hide') ? 'hidden':'visible';
+				for(var i=0,len=tag.length;i<len;i++){
+					tag[i].style.visibility=showOrHide;
+				}
+		};
+
+		(function(){
+			Midiator.register('hideAllNavNum',function(){console.log('hideAllNavNum')});
+			Midiator.register('showAllNavNum',function(){console.log('showAllNavNum')});
+			Midiator.register('hideAllNavUrl',function(){console.log('hideAllNavUrl')});
+			Midiator.register('showAllNavUrl',function(){console.log('showAllNavUrl')});
+		})();
+		(function(){
+			var showBtn=document.getElementById('show_btn'),
+				hideBtn=document.getElementById('hide_btn');
+			showBtn.addEventListener('click',function(){
+				Midiator.send('showAllNavUrl');
+				Midiator.send('showAllNavNum')
+			});
+			hideBtn.addEventListener('click',function(){
+				Midiator.send('hideAllNavUrl');
+				Midiator.send('hideAllNavNum')
+			})
+		})()
+
+		Midiator.register('demo',function(){
+			console.log('first')
+		})
+		Midiator.register('demo',function(){
+			console.log('second')
+		})
+		Midiator.send('demo')
+	</script>
+</body>
+</html>

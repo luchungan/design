@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>寄生组合式继承</title>
+</head>
+<body>
+	<script>
+	function inheritObject(o){
+		function F(){}
+		console.log(o)
+		F.prototype=o
+		console.log((new F()))
+		return new F()
+	}
+	//继承父类的原型
+	function inheritPrototype(superClass,subClass){
+		var p =inheritObject(superClass.prototype)//copy父类原型
+		//console.log(p.constructor)
+		p.constructor=subClass;//为了使这句不影响superclass，必须要用inheritObject方法
+		subClass.prototype=p;
+
+	}
+	function SuperClass(name){
+		this.name=name;
+		this.colors=['red','blue','green'];
+	}
+	SuperClass.prototype.say=function(){alert("say")}
+
+	function SubClass(name, time){
+		SuperClass.call(this,name);//调用父类构造函数
+		this.time=time;
+	}
+	inheritPrototype(SuperClass,SubClass);
+	//SubClass.prototype=new SuperClass();
+	SubClass.prototype.say1=function(){alert("say1")}
+	SubClass.prototype.time=function(){alert(this.time)}
+	var s1=new SubClass('lily',10)
+	var s2=new SubClass('tity',10)
+	s2.colors.push('yellow')
+	console.log(s1);
+	//console.log(s2);
+	</script>
+	
+</body>
+</html>

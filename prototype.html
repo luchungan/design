@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>prototype</title>
+</head>
+<body>
+
+	<script>
+	// console.log(Function);
+	// //console.log(function);
+
+	// 	Function.prototype.say= function(){
+	// 		alert("say");
+	// 	}
+	// 	var f =function(){};
+	// 	f.say();
+	// 	var f=new Function()
+	// 	f.say();
+	Function.prototype.addMethod=function(name,fn){
+		this[name]=fn;
+		
+	}
+	var f =new Function();
+	f.addMethod('say',function(){alert("say")});
+	f.say();
+	</script>
+	
+</body>
+</html>

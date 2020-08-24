@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>观察者模式</title>
+</head>
+<body>
+	<div id="msg_num">1</div>
+	<ul id="msg">
+		<li>11</li><span>删除</span>
+	</ul>
+	<input id="user_input"></input>
+	<input id="user_submit" type="submit"></input>
+<script type="text/javascript">
+	var Observer =(function(){
+		var __messages={};
+		return{
+			//注册消息接口
+			regist : function(type , fn){
+				if(typeof __messages[type]==='undefined'){
+					__messages[type] = [fn];				
+			} else {
+				__messages[type].push(fn);
+			}
+			
+		},
+			remove:function(type ,fn){
+				if(__messages[type] instanceof Array){
+					var i = __messages[type].length - 1;
+					for(;i>0;i--){
+						__messages[type][i] === fn && __messages[type].splice(i ,1)
+					}
+				}
+			},
+			fire:function(type , args){
+				if(!__messages[type]) return;
+				var events ={
+					type:type,
+					args:args|| {}
+				},
+				i =0,
+				len = __messages[type].length;
+				for(; i < len; i++){
+					__messages[type][i].call(this ,events)
+				}
+				
+			}
+
+		}
+	})()
+
+
+
+	function $(id){
+		return document.getElementById(id);
+	}
+	 (function(){
+	 	function addMsgItem(e){
+	 		var text = e.args.text,
+	 		ul = $ ('msg'),
+	 		li = document.createElement('li'),
+	 		span = document.createElement('span');
+	 		span.innerHTML="删除";
+	 		li.innerHTML = text;
+	 		span.onclick = function(){
+	 			ul.removeChild(li);
+	 			Observer.fire('removeCommentMessage',{num:-1});
+
+	 		}
+	 		li.appendChild(span);
+	 		ul.appendChild(li);
+	 	}
+	 	Observer.regist('addCommentMessage',addMsgItem)
+	 })();
+
+	 (function(){
+	 	function changeMsgNum(e){
+	 		var num = e.args.num;
+	 		$('msg_num').innerHTML = parseInt($('msg_num').innerHTML) + num;
+	 	}
+	 	Observer.regist('addCommentMessage',changeMsgNum)
+	 	Observer.regist('removeCommentMessage',changeMsgNum)
+	 })();
+	 (function(){
+	 	$('user_submit').onclick = function(){
+	 		var text = $('user_input');
+	 		if(text.value === ''){
+	 			return;
+	 		}
+	 		Observer.fire('addCommentMessage',{
+	 			text : text.value,
+	 			num : 1
+	 		});
+	 		text.value='';
+	 	}
+	 })()
+
+
+	 var Student = function(result){
+	 	var that = this;
+	 	that.result = result;
+	 	//console.log(this)
+	 	that.say = function(){
+	 		//console.log(that)
+	 		console.log(that.result);
+	 	}
+	 }
+	 Student.prototype.answer = function(question) {
+	 	Observer.regist(question ,this.say);
+	 }
+	 Student.prototype.sleep = function(question){
+	 	console.log(this.result + ' '+ question + ' 已被注销')
+	 	Observer.remove(question , this.say)
+	 }
+	 var Teacher =function(){};
+	 Teacher.prototype.ask=function(question){
+	 	console.log('问题是： '+question);
+	 	Observer.fire(question)
+	 }
+	 var student1 =new Student('学生1回答')
+	 var student2 =new Student('学生2回答')
+	 var student3 =new Student('学生3回答')
+	 student1.answer('什么是设计模式')
+	 student1.answer('简述观察者模式')
+	 student2.answer('什么是设计模式')
+	 student3.answer('什么是设计模式')
+	 student3.answer('简述观察者模式')
+	 student3.sleep('简述观察者模式')
+	 var teacher = new Teacher();
+	 teacher.ask('什么是设计模式')
+	 teacher.ask('简述观察者模式')
+</script>
+</body>
+</html>

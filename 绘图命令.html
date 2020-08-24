@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>绘图命令</title>
+</head>
+<body>
+<canvas id="canvas" style="width:200px;height:200px;background-color: #aaa;"></canvas>
+	<script type="text/javascript">
+		var CanvasCommand=(function(){
+			var canvas =document.getElementById('canvas'),
+				ctx=canvas.getContext('2d');
+				var Action={
+					fillStyle:function(c){
+						ctx.fillStyle=c;
+					},
+					fillRect:function(x,y,width,height){
+						ctx.fillRect(x,y,width,height)
+					},
+					strokeStyle:function(c){
+						ctx.strokeStyle=c;
+					},
+					strokeRect:function(x ,y ,width ,height){
+						ctx.strokeRect( x ,y ,width ,height)
+					},
+					beginPath:function(){
+						ctx.beginPath()
+					},
+					moveTo:function(x,y){
+						ctx.moveTo(x,y)
+					},
+					lineTo:function(x,y){
+						ctx.lineTo(x,y)
+					},
+					fill:function(){
+						ctx.fill;
+					},
+					stroke:function(){
+						ctx.stroke()
+					}
+				}
+				return {
+					excute:function(msg){
+						if(!msg){
+							return;
+						}
+						if(msg.length){
+							for(var i =0 ,len=msg.length;i<len;i++){
+								arguments.callee(msg[i])
+								}
+							}else{
+								msg.param=Object.prototype.toString.call(msg.param)==='[object Array]'?msg.param :[msg.param];
+								Action[msg.command].apply(Action ,msg.param)
+						}
+					}
+				}
+
+		})()
+		CanvasCommand.excute([
+				{command:'strokeStyle',param:'red'},{command:'strokeRect',param:[0,0,20,20]}
+			])
+	</script>
+	<canvas id="canvas2" style="width:200px;height:200px; background-color: blue;"></canvas>
+	<script type="text/javascript">
+		var ctx2 =document.getElementById('canvas2').getContext('2d')
+			ctx2.strokeStyle='red';
+			ctx2.strokeRect(0,0,20,20);
+	</script>
+</body>
+</html>

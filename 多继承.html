@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>多继承</title>
+</head>
+<body>
+
+	<script>
+	function extend(target, source){
+		for (var property in source){
+			target[property]=source[property]
+			console.log(property)
+		}
+		return target;
+	}
+	Object.prototype.mix=function(){
+		var i=1,arg,len=arguments.length;
+		for(;i<len;i++){
+			arg=arguments[i];
+			for(var property in arg){
+				this[property]=arg[property];
+			}
+		}
+	};
+	var book={
+		name:'nihao',
+		id:'wohao'
+	}
+	var book1={
+		ni:'ni',
+		nn:'nn'
+	}
+	var anotherBook={
+		color:'requestData'
+	}
+	anotherBook.mix(book,book1)
+	console.log(anotherBook)
+	</script>
+	
+</body>
+</html>

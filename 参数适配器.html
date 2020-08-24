@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>参数适配器</title>
+</head>
+<body>
+
+	<script>
+	var doSomething=function(obj){
+		var _adapter={
+			name:'夏雨夜荷',
+			title:'设计模式',
+			age:24,
+			color:'pink'
+		}
+		for(var i in _adapter){
+			_adapter[i] =obj[i] || _adapter[i]
+		}
+	}
+
+	//数据适配器
+	var arr=['jone',13,'American'];
+	function arrToObjectAdapter(arr){
+		return{
+			name:arr[0],
+			age:arr[1],
+			type:arr[2]
+		}
+	}
+	</script>
+	
+</body>
+</html>

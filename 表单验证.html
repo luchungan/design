@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>表单验证</title>
+</head>
+<body>
+	<form id="user">
+		<span>电话号码：</span><input type="text" name="phone" id="phone">
+		<span>姓名：</span><input type="text" name="name" id="name">
+		<span>银行卡号：</span><input type="text" name="card" id="card">
+		<input type="button" name="submit" value="提交" id="submit" >
+	</form>
+ <script type="text/javascript">
+ 	var InputStrategy=(function(){
+ 		var Strategy ={
+ 			notNull:function(value){
+ 				return /\s+/.test(value)?'请输入内容':''
+ 			},
+ 			number:function(value){
+ 				return /^[0-9]+(\.[0-9]+)?$/.test(value)?'':'请输入数字'
+ 			},
+ 			phone:function(value){
+ 				return /^\d{3}\-\d{8}$|^\d{4}\-\d{7}$/.test(value)?'':"请输入电话号码入如010-88888888或者0110-7777777"
+ 			}
+ 		}
+ 		return {
+ 			check:function(type,value){
+ 					return Strategy[type]&&Strategy[type](value)
+ 				},
+ 			addStragety:function(type ,fn){
+ 				Strategy[type]=fn;
+ 			}
+ 		}
+ 	})()
+ 	InputStrategy.addStragety('nikename' ,function(value){
+ 		return /^[a-zA-Z]\w{3,7}$/.test(value)?'':'请输入昵称，如YYZZ';
+ 	})
+ 	function $tag(tag ,content){
+ 		content = content || document;
+ 		return content.getElementById(tag);
+ 	}
+
+ 	$tag('submit').onclick=function(){
+ 		var phone=$tag('phone').value,name=$tag('name').value,card=$tag('card').value;
+ 		var error=InputStrategy.check('phone',phone)+'; '+InputStrategy.check('number',card)+'; '+InputStrategy.check('nikename',name);
+ 		error!=';'&&error!=';;'&&alert(error)
+ 		
+ 	}
+ 	//console.log('hello')
+ </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>缓存器</title>
+</head>
+<body>
+<script type="text/javascript">
+	var page=(function(){
+		var cache={}//创建一个缓存对象
+		return function(page ,fn){
+			if(cache[page]){
+				showPage(page ,cache[page])
+				fn&&fn()
+			}else{
+				$.post('./data/getNewsData.php',{page:page},function(res){
+					if(res.errOn==0){
+						showPage(page ,res.data);
+						fn&&fn();
+						cache[page]=res.data;
+					}else{
+						//处理异常
+					}
+				})
+			}
+		}
+	})()
+</script>
+</body>
+</html>

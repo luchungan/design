@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>多元化对象</title>
+</head>
+<body>
+
+	<script>
+	var Speed =function(x ,y){
+		this.x=x;
+		this.y=y;
+	}
+	Speed.prototype.run=function(){
+		console.log(this.x)
+	}
+	var Color=function(cl){
+		this.color=cl;
+	}
+	Color.prototype.draw=function(){
+		console.log('draw')
+	}
+	var Shape=function(sp){
+		this.shape=sp;
+	}
+	Shape.prototype.change=function(){
+		console.log(this.shape)
+	}
+
+	//构建一个peopel类，他只能speed
+	var People=function(x ,y){
+		this.speed= new Speed(x ,y);
+	}
+	People.prototype.init=function(){
+		this.speed.run();
+	}
+
+	//构建一个spirite类，他有speed和shape两种方法
+	var Spirite=function(x ,y ,sp){
+		this.speed=new Speed(x ,y);
+		this.shape=new Shape(sp);
+	}
+	Spirite.prototype.init=function(){
+		this.speed.run();
+		this.shape.change();
+	}
+	  //实例化people
+	  var p =new People(10 ,10)
+	  p.init();
+	  var spirite1=new Spirite(10 ,10 , 'long');
+	  spirite1.init();
+	</script>
+	
+</body>
+</html>

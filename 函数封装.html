@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>函数封装</title>
+</head>
+<body>
+
+	<script>
+		var F = function(id,name,price){
+			this.id=id;
+			this.name=name;
+			this.price=price;
+		}
+		F.prototype={
+			constructor:F,
+			say:function(){alert(this.name)}
+		}
+		var f =new F(3,'lily',30);
+		f.say();
+
+
+
+		var Book = function (id,bookName,price){
+			//对象的私有属性11
+			var num = 1;
+			//对象的私有方法
+			var checkId=function(){
+				return num==id;
+			}
+			//特权方法
+			this.getName=function(){
+				return this.name;
+			}
+			this.getPrice=function(){
+				return this.price
+			}
+			this.setName=function(name){
+				this.name=name;
+			}
+			this.setPrice=function(price){
+				this.price=price;
+			}
+			//公有属性
+			this.id=id;
+			//公有方法
+			this.copy=function(){
+
+			}
+			//构造器
+			this.setName(bookName);
+			this.setPrice(price);
+		}
+		Book.prototype={
+			constructor:Book,
+			isJsBook:false,
+			display:function(){}
+		}
+		Book.isChina = true; //类静态公有属性
+		Book.resetTime = function(){
+			console.log('new time')
+		}
+		var js =new Book(3,'javascript',300);
+		console.log(js);
+	</script>
+	
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>安全工厂模式</title>
+</head>
+<body>
+	<div id="container"></div>
+	<script>
+	function Factory(type ,content){
+		if(this instanceof Factory){
+			var s=new this[type](content)
+			return s;
+		}else{
+			return new Factory(type ,content)
+		}
+	}
+
+	Factory.prototype={
+		Java:function(content){
+			this.content=content;
+			(function(content){
+				var div =document.createElement('div');
+				div.innerHTML=content;
+				div.style.width=100+'px';
+				div.style.height=100+'px';
+				div.style.background='pink';
+				document.getElementById('container').appendChild(div);
+			})(content)
+		},
+		Javascript:function(content){
+			this.content=content;
+			(function(content){
+				var div =document.createElement('div');
+				div.innerHTML=content;
+				div.style.width=100+'px';
+				div.style.height=100+'px';
+				div.style.background='pink';
+				document.getElementById('container').appendChild(div);
+			})(content)
+		},
+		UI:function(content){
+			this.content=content;
+			(function(content){
+				var div =document.createElement('div');
+				div.innerHTML=content;
+				div.style.width=100+'px';
+				div.style.height=100+'px';
+				div.style.background='pink';
+				document.getElementById('container').appendChild(div);
+			})(content)
+		}
+	}
+	//var ui =Factory('UI',"世界最强UI")
+	var data=[
+		{type:'Java',content:'java哪家强'},
+		{type:'UI',content:'ui哪家强'},
+		{type:'Javascript',content:'javascript哪家强'}
+	]
+	for(var i=2;i>=0;i--){
+		Factory(data[i].type , data[i].content)
+	}
+	</script>
+	
+</body>
+</html>

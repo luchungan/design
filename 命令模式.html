@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>test</title>
+</head>
+<body>
+	<div id="title"></div>
+	<div id="content"></div>
+	<script type="text/javascript">
+		var ViewConmand =(function(){
+			var tp1={
+				product:['<div>',
+							'<img src={#src#}>',
+							'<p>{#text#}</p>',
+						'</div>'].join(''),
+
+				title:['<div>',
+							'<h2>{#title#}</h2>',
+							'<p>{#tips#}</p>',
+						'</div>'].join('')
+						
+			},
+			html='';
+
+			var formateString=function(str ,data){
+				return str.replace(/\{#(\w+)#\}/g ,function(match ,key){//key是(\w+)匹配项
+					return data[key];
+				})
+			}
+			var Action={
+				create:function(data ,view){
+					if(data.length){//只有数组有length属性，对象没有
+						for (var i =0, len=data.length;i<len;i++){
+							html+=formateString(tp1[view],data[i]);
+						}
+					}else{
+							html+=formateString(tp1[view],data)
+					}
+					console.log(html)
+				},
+				display:function(container ,data ,view){
+					if(data){
+						this.create(data ,view);
+					}
+					document.getElementById(container).innerHTML=html;
+					html='';
+				}
+			}
+
+			return function excute(msg){
+				msg.param=Object.prototype.toString.call(msg.param)==='[object Array]'?msg.param:[msg.param];
+				Action[msg.command].apply(Action ,msg.param)
+			}
+
+		})()
+
+		var productData = [
+			{
+				src:'command/02.jpg',
+				text:'绽放的桃花'
+			},{
+				src:'command/03.jpg',
+				text:'飘雪'
+			},{
+				src:'command/04.jpg',
+				text:'阳光下的温馨'
+			}
+			],titleData={
+				title:'夏日里的温馨',
+				tips:'暖暖的阳光带给人们的喜悦'
+			};
+
+			ViewConmand({
+				command:'display',
+				param:['title',titleData ,'title']
+			});
+			ViewConmand({
+				command:'display',
+				param:['content',productData,'product']
+			})
+		
+	</script>
+</body>
+</html>

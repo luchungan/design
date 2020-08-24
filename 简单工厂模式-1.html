@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>简单工厂模式_1</title>
+</head>
+<body>
+  <div id="container"></div>
+	<script>
+	var Java=function(content){}
+	var PhP=function(content){}
+	var Javascript=function(content){
+		this.content=content;
+		(function(content){
+			var div=document.createElement('div');
+			div.innerHTML=content;
+			div.style.background='pink';
+			document.getElementById('container').appendChild(div)
+		})(content)
+	}
+	function JobFactory(type ,container){
+		if(!(this instanceof JobFactory)){
+			return new JobFactory;
+		}
+		switch(type){
+			case 'Java': return new Java();
+			case 'PhP' : return new Php();
+			case 'Javascript': return new Javascript(container); 
+		}
+	}
+	var javascript =new JobFactory('Javascript' , 'javascript哪家强')
+	</script>
+	
+</body>
+</html>

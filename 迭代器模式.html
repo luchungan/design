@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>迭代器模式</title>
+</head>
+<body>
+	<ul id="container">
+		<li>1</li>
+		<li>2</li>
+		<li>3</li>
+		<li>4</li>
+	</ul>
+	<img src="load.jpg">
+	<canvas style="background-color: #333;"></canvas>
+	<script type="text/javascript">
+		var Iterator = function(items ,container){
+			var container = container&&document.getElementById(container) || document,
+				items=container.getElementsByTagName(items),
+				length = items.length,
+				index = 0;
+			var splice = [].splice;
+			return{
+				first:function(){
+					index=0;
+					return items[index]
+				},
+				least:function(){
+					index=lenth-1;
+					return items[index]
+				},
+				pre:function(){
+					if(--index>0){
+						return items[index]
+					}else{
+						index = 0;
+						return null
+					}
+				},
+				next:function(){
+					if(++index<length){
+						return items[index];
+					}else{
+						index=length-1;
+						return null
+					}
+				},
+				get:function(num){
+					index = num>=0?num%length:num%length+length;
+					return items[index]
+				},
+				dealEach:function(fn){
+					var args=splice.call(arguments ,1)
+					for(var i = 0; i <length ;i++){
+						fn.apply(items[i],args)
+					}
+				},
+				dealItem:function(num ,fn){
+					fn.apply(this.get(num) ,splice.call(arguments ,2))
+				},
+				exclusive:function(num ,allFn ,numFn){
+					this.dealEach(allFn);
+					if(Object.prototype.toString.call(num) === "[object Array]"){
+						for (var i = 0,len =num.length ;i <len ;i++){
+							this.dealItem(num[i],numFn)
+						}
+					}else{
+							this.dealItem(num,numFn)
+						}
+				}
+			}
+		}
+	
+		var demo = new Iterator('li' ,'container')
+		//console.log(demo.first())
+		demo.dealEach(function(text ,color){
+			this.innerHTML = text;
+			this.style.background = color;
+		},'test','pink')
+		demo.exclusive([1,2],function(){
+			this.innerHTML = '被排除的';
+			this.style.background = 'green';
+		},function(){
+			this.innerHTML = '选中的';
+			this.style.background = 'red';
+		})
+
+
+
+
+		//数组迭代器
+		var eachArray = function(arr ,fn){
+			var i = 0,
+				len = arr.length;
+				for(;i < len; i++){
+					if(fn.call(arr,i,arr[i]) === false){
+						break;
+					}
+				}
+		}
+
+
+		//对象迭代器
+		var eachObject = function(obj ,fn){
+			for(var i in obj){
+				if(fn.call(obj,i,obj[i]) === false){
+					break;
+				}
+			}
+		}
+	for (var arr=[],i=0;i<5;arr[i++]=i);
+		eachArray(arr ,function(i ,data){
+			console.log(i ,data);
+		})
+		var testObj={
+			a:23,
+			b:56,
+			c:67
+		}
+		eachObject(testObj, function(i ,data){
+			console.log(i,data)
+		})
+
+
+		//同步变量迭代器
+		var AGetter = function(key){
+			if(!A)return undefined;
+			var result = A;
+			key=key.split('.');
+			for(var i = 0,len=key.length; i< len ;i++){
+				if(result[key[i]] !==undefined){
+					result=result[key[i]];//一层一层迭代查询
+				}else{
+					return undefined;
+				}
+			}
+			return result;
+		}
+
+		var ASetter = function(key ,val){
+			if(!A){
+				return false;
+			}
+			var result =A;
+			var key=key.splice('.');
+			for (var i=0 ,len=key.length;i<len-1;i++){
+				if(A[key[i]] === undefined){
+					A[key[i]]={}
+				}
+				if(!(A[key[i]] instanceof Object)){
+					throw new Error('A.'+key.splice(0,i+1).join('.') +'is not Object');
+					return false;
+				}
+				result =result[key[i]];
+			}
+			return result[key[i]]=val;
+		}
+
+
+
+		var A ={
+			common:{},
+			client:{
+				user:{
+					username:'雨荷清河',
+				uid:'123'
+				}
+				
+			},
+			server :{}
+		};
+
+		console.log(AGetter('client.user.uid'))
+
+
+		//分支循环嵌套	
+		window.onload = function(){
+			var canvas = document.getElementsByTagName('canvas')[0],
+			img =document.images[0],
+			width = (canvas.width = img.width*2)/2,
+			height = canvas.height=img.height;
+			ctx= canvas.getContext('2d');
+			ctx.drawImage(img ,0,0);
+			var canvasData = ctx.getImageData(0,0,40,40);
+			var data=canvasData.data;
+			console.log(data)
+		}
+
+		function dealImage(t ,x ,y ,w ,h ,a){
+			var canvasData=ctx.getImageData(x,y,w,h);
+			var data=canvasData.data;
+			for(var i = 0,len =data.length;i <len;i +=4){
+				case 'red':
+				data[i+1]=0;
+				data[i+2]=0;
+				data[i+3]=a;
+				break;
+			}
+		}
+
+
+
+
+		function dealImage(t,x,y,w,h,a){
+			var canvasData = ctx.getImageData(x ,y ,w ,h),
+			data=canvasData.data;
+			var Deal=function(){
+				var method = {
+					'default' : function(i){
+						return method['gray'](i);
+					},
+					'red':function(i){
+						data[i + 1] = 0;
+						data[i + 2] = 0;
+						data[i + 3] = a;
+					}
+				};
+				return function(type){
+					return method[type] || method['default']
+				}
+			}
+			function eachData(fn){
+			for (var i = 0 ,len=data,length;i<len;i+=4){
+				fn(i)
+			}
+		}
+		eachData(Deal(t));
+		ctx.putImageData(canvasData,width + x,y)
+		}();
+		
+	</script>
+</body>
+</html>

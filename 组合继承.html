@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>组合模式</title>
+</head>
+<body>
+	<script>
+	function SuperClass(id){
+		this.books=['java','android','linux','unix'];
+		this.id=id;
+	}
+	SuperClass.prototype.showBooks=function(){
+		console.log(this.books);
+	}
+	function SubClass(id){
+		SuperClass.call(this,id)
+	}
+	SubClass.prototype=new SuperClass();
+	SubClass.prototype.getId=function(){
+		console.log(this.id)
+	}
+	var A1=new SubClass('a1');
+	var A2=new SubClass('a2');
+	A1.books.push('javascript');
+	console.log(A1.books);
+	console.log(A1.constructor.prototype);
+	</script>
+
+	
+	
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>原型继承</title>
+</head>
+<body>
+
+	<script>
+	function prototypeExtend(){
+		var F =function(){},
+		args=arguments,
+		i=0,
+		len=args.length;
+		for(;i<len;i++){
+			for(var j in args[i]){
+				F.prototype[j]=args[i][j];
+			}
+		}
+		return new F();
+	}
+	var penguin=prototypeExtend({
+		speed:20,
+		swim:function(){
+			console.log('游泳速度'+this.speed)
+		}
+	},{
+		jump:function(){
+			console.log('jump')
+		}
+	},{
+		run:function(){
+			console.log('run')
+		}
+	})
+	console.log(penguin)
+	</script>
+	
+</body>
+</html>

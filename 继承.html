@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>继承</title>
+</head>
+<body>
+
+	<script>
+		function SuperClass(){
+			this.SuperValue=true;
+		}
+		SuperClass.prototype.getSuperValue=function(){
+			return this.SuperValue;
+		}
+		function SubClass(){
+			this.SubValue=false;
+		}
+		SubClass.prototype=new SuperClass();
+		SubClass.prototype.getSubValue=function(){
+			return this.SubValue;
+		}
+		
+		function SubsClass (){
+			this.SubsValue=false;
+		}
+		SubsClass.prototype=new SubClass();
+		SubsClass.prototype.getSubsValue=function(){
+			return this.SubsValue;
+		}
+		console.log(new SubsClass());
+
+
+
+
+
+
+		//不足
+		function A (){
+			this.book=['java','C','javascript'];
+		}
+		function B (){};
+		B.prototype=new A;
+		var b1=new B();
+		var b2= new B();
+		console.log(b1);
+		b2.book.push('c#');
+		console.log(b2);
+	</script>
+	
+</body>
+</html>

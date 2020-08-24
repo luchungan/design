@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>原型式继承</title>
+</head>
+<body>
+
+	<script>
+	function inheritObject(o){
+		function F(){}
+		F.prototype=o;
+
+		//console.log(new F())
+		return new F();
+		//console.log(new F())
+	}
+	var book={
+		name:"js book",
+		alikeBook:['css book','html book']
+	}
+	var newBook=new inheritObject(book);
+	var newBook2=inheritObject(book);
+	newBook2.alikeBook.push('nodejs book')
+	//console.log(newBook);
+
+	function createBook(obj){
+		var o =new inheritObject(obj)
+		//console.log(inheritObject(obj))
+		//console.log(new inheritObject(obj))
+		o.getName = function(){
+			console.log(name)
+		}
+		return o;
+	}
+	var newBook3=createBook(book);
+	console.log(newBook3)
+	</script>
+	
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>职责链模式</title>
+</head>
+<body>
+	<script type="text/javascript">
+		// var sendData = function(data ,dealType ,dom){
+		// 	var xhr = XMLHttpRequest ();
+		// 	url = 'getData.php?mod=userInfo';
+		// 	xhr.onload = function(event){
+		// 		if((xhr.status>=200&&xhr.status<300)||xhr.status = 304){
+		// 			dealData(xhr.responseText ,dealType ,dom);
+		// 		}else{
+		// 			console.log('fail')
+		// 		}
+		// 	}
+		// 	for(var i in data){
+		// 		url +='&' + i + '=' + data[i]
+		// 	}
+		// 	xhr.open("get" , url ,true);
+		// 	xhr.send(null);
+		// }
+		var dealData = function(data ,dealType ,dom){
+			var dataType = Object.prototype.toString.call(data);
+			switch(dealType){
+				case 'sug':
+					if(dataType === "[object Array]"){
+						return createSug(data ,dom)
+					}
+					if(dataType === "[object Object]"){
+						var newData = [];
+						for(var i in data)
+							newData.push(data[i])
+						console.log(newData)
+						return createSug(newData ,dom)
+					}
+					return createSug([data] ,dom);
+					break;
+				case 'validate':
+					return createValidataResult(data ,dom);
+					break;
+			}
+		}
+		var createSug = function(data,dom){
+			console.log(data ,dom ,'createSug')
+		}
+		var createValidataResult = function(data ,dom){
+			console.log(data ,dom ,'createValidataResult')
+		}
+		dealData([11,22,33] ,'sug' ,document)
+		// var createSug = function(data ,dom){
+		// 	var i = 0,
+		// 		len =data.length,
+		// 		html = '';
+		// 	for (; i< len ;i++){
+		// 		html +='<li>' +data[i] +'</li>';
+		// 	}
+		// 	dom.parentNode.getElementByTagName('ul')[0].innerHTML = html;
+		// }
+
+		// var createValidataResult = function(data ,dom){
+		// 	dom.parentNode.getElementByTagName('span')[0].innerHTML = data;
+		// }
+	</script>
+	
+</body>
+</html>

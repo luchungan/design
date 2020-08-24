@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>抽象工厂模式</title>
+</head>
+<body>
+
+	<script>
+	//抽象工厂方法
+	function VehicleFactory(subType , superType){
+		if((typeof VehicleFactory[superType])==='function'){
+			//console.log('success')
+			function F(){};
+			F.prototype=new VehicleFactory[superType]();//F.prototype={this._proto_=superClass.prototype}
+			subType.constructor=subType;
+			subType.prototype=new F();//{this._proto_=F.prototype}
+			//console.log(new subType)
+		}else{
+			return new Error('未创建该抽象类')
+		}
+	}
+	//小汽车抽象类
+	VehicleFactory.Car=function(){
+		this.type='Car'
+	}
+	VehicleFactory.Car.prototype = {
+		getPrice:function(){
+			throw new Error('抽象方法不能调用')
+		},
+		getSpeed:function(){
+			throw new Error('抽象方法不能调用')
+		}
+	}
+	//公交车类
+	VehicleFactory.Bus=function(){
+		this.type='Bus'
+	}
+	VehicleFactory.Bus.prototype = {
+		getPrice:function(){
+			throw new Error('抽象方法不能调用')
+		},
+		getPassengerNumber:function(){
+			throw new Error('抽象方法不能调用')
+		}
+	}	
+	//货车抽象类
+	VehicleFactory.Truck=function(){
+		this.type='Truck'
+	}
+	VehicleFactory.Truck.prototype = {
+		getPrice:function(){
+			throw new Error('抽象方法不能调用')
+		},
+		getTrainload:function(){
+			throw new Error('抽象方法不能调用')
+		}
+	}
+	var BMW =function(price , speed){
+		this.price=price;
+		this.speed=speed;
+	}
+	VehicleFactory(BMW , 'Car');
+	BMW.prototype.getPrice=function(){
+		console.log(this.price);
+	}
+	BMW.prototype.getSpeed=function(){
+		console.log(this.speed)
+	}
+	var bmw=new BMW(100000,100);
+	bmw.getPrice();
+	bmw.getSpeed();
+	console.log(bmw.type)
+	</script>
+	
+</body>
+</html>

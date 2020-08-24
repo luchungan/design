@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>装饰者模式</title>
+</head>
+<body>
+	<div>
+	<h3 id="tel_demo">提示信息</h3>
+	<input type="text" id="tel_input">
+	<span id="tel_warn" style="display:none;">格式</span>
+	</div>
+	<script>
+	var tel_input=document.getElementById('tel_input')
+	var tel_warn=document.getElementById('tel_warn')
+	var tel_demo=document.getElementById('tel_demo')
+	
+	// tel_input.addEventListener('click',function(){
+	// 	tel_warn.style.display='inline-block';
+		
+	// })
+
+
+
+	//用dom0级事件模拟
+	tel_input.onclick=function(){
+		tel_warn.style.display='inline-block';
+	}
+
+	//增加需求，click后h3消失    装饰者模式写法
+	var decorator = function(input , fn){
+
+		var input=document.getElementById(input)
+		if(typeof input.onclick ==='function'){
+			var oldClickFn=input.onclick;
+			input.onclick=function(){
+				oldClickFn();
+				fn();
+				}
+			}else{
+				fn()
+			}
+		}
+
+		decorator('tel_input',function(){
+			tel_demo.style.display="none"
+		})
+	
+		tel_input.onfocus=function(){
+			console.log('focus')
+		}
+		tel_input.onblur=function(){
+			console.log('blur')
+		}
+	</script>
+		
+	
+</body>
+</html>

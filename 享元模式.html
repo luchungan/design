@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>享元模式</title>
+</head>
+<body>
+<script type="text/javascript">
+	var FlyWeight={
+		moveX:function(x){
+			this.x=x;
+		},
+		moveY:function(y){
+			this.y=y;
+		}
+	}
+	var Player=function(x,y,z){
+		this.x=x;
+		this.y=y;
+		this.color=z;
+	}
+	Player.prototype=FlyWeight;
+	Player.prototype.changeC=function(c){
+		this.color=c;
+	};
+	var player1=new Player(3,4,'red');
+	console.log(player1);
+	player1.moveX(8);
+	player1.moveY(3);
+	console.log(player1)
+</script>
+</body>
+</html>

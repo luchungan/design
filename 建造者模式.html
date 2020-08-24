@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>建造者模式</title>
+</head>
+<body>
+
+	<script>
+	var Human=function(param){
+		this.skill=param&&param.skill||'保密';
+		this.hobby=param&&param.hobby||'保密';
+	}
+	Human.prototype={
+		getSkill:function(){
+			return this.skill;
+		},
+		getHobby:function(){
+			return this.hobby;
+		}
+	}
+	var Named=function(name){
+		var that=this;
+		(function(name ,that){
+			that.wholeName=name;
+			if(name.indexOf(' ')>-1){
+				that.firstname=name.slice(0 ,name.indexOf(' '));
+				that.secondName=name.slice(name.indexOf(' '));
+			}
+		})(name ,that)
+	}
+	var Work=function(work){
+		var that=this;
+		(function(work){
+			switch (work){
+				case 'code':
+					that.work='工程师';
+					that.workDescript='沉迷于编写代码！';
+					break;
+				case 'UI' :
+				case 'UE' :
+					that.work="设计师";
+					that.workDescript='设计更似一种艺术';
+					break;
+				case 'teacher' :
+					that.work="教师";
+					taht.workDescript="教书育人";
+					break;
+				default :
+					that.work=work;
+					that.workDescript="对不起，不清楚你的职业！"
+
+			}
+		})(work)
+	}
+	Work.prototype.changeWork=function(work){
+		this.work=work;
+	}
+	Work.prototype.changeWorkDescript=function(setence){
+		this.setence=setence;
+	}
+
+	var Person=function(name ,work){
+		var _person=new Human();
+		_person.work=new Work(work);
+		_person.name=new Named(name);
+		return _person;
+	}
+	var person=new Person('xiao ming','code');
+	console.log(person)
+	//person.work.changeWork('歌手')
+	</script>
+
+	
+</body>
+</html>

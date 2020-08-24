@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>静态变量</title>
+</head>
+<body>
+
+	<script>
+	var Conf=(function(){
+		var conf={
+			MAX_NUM:100,
+			MIN_NUM:1,
+			COUNT:1000
+		}
+		return {
+			get:function(name){
+				return conf[name]?conf[name]:null; //conf.name是conf['name']的意思
+			}
+		}
+	})()
+	console.log(Conf.get('MAX_NUM'));
+
+
+
+
+	//惰性单例
+	var LazySingle=(function(){
+		var _instance=null;
+		function single(){
+			console.log('single')
+			return {
+				publicMethod:function(){},
+				publicPrototype : '1.0'
+			}
+		}
+		console.log(_instance)
+		return function (){
+			console.log('re')
+			if(!_instance){
+				_instance=single()
+			}
+			return _instance;
+		}
+	})()
+	console.log(LazySingle())
+	</script>
+	
+</body>
+</html>

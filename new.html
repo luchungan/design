@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+
+	<script>
+	var Cat = function(name){
+		this.name=name;
+	}
+	var obj={}
+	var result=Cat.call(obj,'cat');
+	console.log(result)
+
+
+
+	var Animal=function(name){
+		this.name=name;
+	}
+	Animal.prototype.say=function(){
+		alert("say");
+	}
+	Animal.prototype={
+		run:function(){
+			alert("run");
+		}
+	}
+	
+	var cat=new Animal(cat);
+	cat.say();
+	cat.run();
+	console.log(cat);
+	</script>
+	
+</body>
+</html>

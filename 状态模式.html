@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>状态模式</title>
+</head>
+<body>
+	<script type="text/javascript">
+		function MarryStatus(){
+			var _currentStatus={},
+			status={
+				jump:function(){
+					console.log('jump')
+				},
+				shot:function(){
+					console.log('shot')
+				},
+				squat:function(){
+					console.log('squat')
+				},
+				move:function(){
+					console.log('move')
+				}
+			};
+			var Action={
+				changeStatus:function(){
+					_currentStatus={};
+					var args=arguments;
+					if(args.length){
+						for(var i=0,len=args.length;i<len;i++){
+							_currentStatus[args[i]]=true;
+						}
+					}
+					return this;
+				},
+				goes:function(){
+					console.log('执行一次动作	')
+					for(var i in _currentStatus){
+						status[i]&&status[i]();
+					}
+					return this;
+				}
+
+			}
+			return {
+				change : Action.changeStatus,
+				goes  : Action.goes
+			}
+		}
+		var marry1 = new MarryStatus();
+		marry1.change('jump','move').goes().change().goes().change('jump','shot').goes()
+		var marry2 = new MarryStatus();
+		marry1.change('jump').goes().change().goes().change('jump',).goes()
+	</script>
+</body>
+</html>

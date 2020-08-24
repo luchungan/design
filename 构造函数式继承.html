@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>构造函数式继承</title>
+</head>
+<body>
+
+	<script>
+	function SuperClass(id){
+		this.books=['java','html','c'];
+		this.id=id;
+	}
+	SuperClass.prototype.showBooks=function(){
+		console.log(this.books)
+	}
+	function SubClass(id){
+		SuperClass.call(this,id);
+	}
+	var A1=new SubClass('a1');
+	var A2=new SubClass('a2');
+	A1.books.push('android');
+	console.log(A1);
+	console.log(A2);
+	</script>
+	
+</body>
+</html>

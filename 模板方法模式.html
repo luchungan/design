@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>模板方法模式</title>
+</head>
+<body>
+	<div id="content" ></div>
+<script type="text/javascript">
+	var Alert=function(data){
+		if(!data)return;
+		this.content=data.content;
+		this.panel=document.createElement('div');
+		this.contentNode = document.createElement('p');
+		this.confirmBtn = document.createElement('span');
+		this.closeBtn = document.createElement('b');
+		this.panel.className = 'alert';
+		this.closeBtn.className= 'a-close';
+		this.confirmBtn.className = 'a-confirm';
+		this.confirmBtn.innerHTML = data.confirm || '确认';
+		this.contentNode.innerHTML = this.content;
+		this.success=data.success || function(){};
+		this.fail=data.fail || function(){};
+	}
+	Alert.prototype = {
+		init:function(){
+			this.panel.appendChild(this.closeBtn);
+			this.panel.appendChild(this.contentNode);
+			this.panel.appendChild(this.confirmBtn);
+			document.body.appendChild(this.panel);
+			this.bindEvent();
+			this.show();
+		},
+		bindEvent:function(){
+			var me=this;
+			this.closeBtn.onclick = function(){
+				me.fail();
+				me.hide();
+			}
+			this.confirmBtn.onclick = function(){
+				me.success();
+				me.hide();
+			}
+		},
+		hide:function(){
+			this.panel.style.display='none';
+		},
+		show:function(){
+			this.panel.style.display='block';
+		}
+
+	}
+
+	var RightAlert = function(data){
+		Alert.call(this,data);
+		this.confirmBtn.className = this.confirmBtn.className + ' right';
+	}
+	RightAlert.prototype=new Alert();
+
+	var TitleAlert = function(data){
+		Alert.call(this,data);
+		this.title=data.title||'biaoqi';
+		this.titleNode=document.createElement('h3');
+		this.titleNode.innerHTML=this.title;
+	}
+	TitleAlert.prototype=new Alert();
+	TitleAlert.prototype.init=function(){
+		this.panel.insertBefore(this.titleNode,this.panel.firstChild);
+		Alert.prototype.init.call(this);
+	}
+
+	//var alert1=new Alert({content:'nihao'});
+	//alert1.init()
+	var CancelAlert=function(data){
+		TitleAlert.call(this,data);
+		this.cancel=data.cancel;
+		this.cancelBtn=document.createElement('span');
+		this.cancelBtn.className='cancel';
+		this.cancelBtn.innerHTML=this.cancel||'取消';
+	}
+	CancelAlert.prototype=new Alert();
+	CancelAlert.prototype.init=function(){
+		TitleAlert.prototype.init.call(this);
+		this.panel.appendChild(this.cancelBtn);
+	}
+	CancelAlert.prototype.bindEvent=function(){
+		var me = this;
+		TitleAlert.prototype.bindEvent.call(this);
+		this.cancelBtn.onclick=function(){
+			me.fail();
+			me.hide();
+		}
+
+	}
+	// var cancel1=new CancelAlert({
+	// 	cancel:'取消',
+	// 	fail:function(){alert('fail')},
+	// 	title:'标题',
+	// 	content:'nihao'
+	// })
+	// cancel1.init()
+
+
+
+	//多类导航栏
+	function formateString(str , data){
+		return str.replace(/\{#(\w+)#\}/g,function(match ,key){
+			console.log(key)
+			return typeof data[key]=== undefined ? '':data[key]
+		});
+	}
+	var Nav = function(data){
+		this.item = '<a href="{#href#}" title="{#title#}">{#name#}</a>';
+		this.html ='';
+		for(var i=0,len=data.length ;i<len ;i++){
+			this.html +=formateString(this.item ,data[i]);
+		}
+		return this.html;
+	}
+	var NumNav = function(data){
+		console.log(data)
+		var tp1 ='<b>{#num#}</b>';
+		for(var i=data.length-1;i>=0;i--){
+		 data[i].name=data[i].name+formateString(tp1 ,data[i]);
+		}
+		return Nav.call(this,data)
+	}
+	var nav =document.getElementById('content');
+	nav.innerHTML = NumNav([{
+		href : 'http://www.baidu.com/',
+		title:'百度一下，你就知道',
+		name:'百度',
+		num : '10'
+	},{
+		href : 'http://www.taobao.com/',
+		title : '淘宝商城',
+		name:'淘宝',
+		num:'2'
+	},{
+		href : 'http://www.qq.com/',
+		title:'腾讯首页',
+		name:'腾讯',
+		num:'3'
+	}])
+</script>
+</body>
+</html>

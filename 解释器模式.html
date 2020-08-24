@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>解释器模式</title>
+</head>
+<body>
+<script type="text/javascript">
+	var Interpreter=(function(){
+		function getSublingName(node){
+			if(node.previousSibling){
+				var name = '',
+				count = 1,
+				nodeName = node.nodeName,
+				sibling = node.previousSibling;
+				while(sibling){
+					if(sibling.nodeType == 1&& sibling.nodeType ===node.nodeType&&sibling.nodeName){
+						
+					}
+				}
+			}
+		};
+		return function(node ,wrap){
+			var path =[],
+			wrap = wrap || document;
+			if(node === wrap){
+				if(wrap.nodeType==1){
+					path.push(wrap.nodeName.toUpperCase());
+				}
+				return path;
+			}
+			if(node.parentNode !== wrap){
+
+				path = arguments.callee(node.parentNode, wrap);
+			}else{
+				if(wrap.nodeType==1){
+					path.push(wrap.nodeName.toUpperCase())
+				}
+				
+			}
+		}
+	})()
+</script>
+</body>
+</html>

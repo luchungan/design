@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>小型代码库</title>
+</head>
+<body>
+	<div id="mydiv"></div>
+	<script>
+	var A={
+		$:function(id){
+			return document.getElementById(id);
+		},
+		css:function(id ,key ,type){
+			this.$(id).style[key]=type;
+		},
+		attr:function(id ,key ,value){
+			this.$(id)[key]=value;
+		},
+		on:function(id ,type ,fn){
+			this.$(id)["on"+type]=fn;
+		}
+
+	}
+	A.css('mydiv' ,'width' ,'100px');
+	A.css('mydiv' ,'height' ,'100px');
+	A.css('mydiv' ,'background' ,'blue');
+	A.attr('mydiv' ,'className' ,'mydiv1')
+	A.on('mydiv' ,'mousemove' ,al)
+	function al(){
+		A.css('mydiv' ,'background' ,'red');
+		A.css('mydiv' ,'width' ,'20px');
+		console.log(A.$('mydiv').className)
+	}
+	</script>
+	
+</body>
+</html>

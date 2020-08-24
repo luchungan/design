@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>原型模式</title>
+</head>
+<body>
+	<script>
+	function inheritObject(o){
+		var F=function(){}
+		F.prototype=o
+		return new F();
+	}
+	function inheritPrototype(subClass ,superClass){
+		var p=inheritObject(superClass.prototype);
+		p.constructor=subClass;
+		subClass.prototype=p;
+	}
+	var LoopImages=function(imgArr ,container){
+		this.imagesArray =imgArr;
+		this.container=container;
+	}
+	LoopImages.prototype={
+		createImg:function(){
+			console.log('LoopImages');
+		},
+		changeImg:function(){
+			console.log('changeImg');
+		}
+	}
+	var SlideLoopImages=function(imgArr ,container){
+		LoopImages.call(this,imgArr,container);
+	}
+	inheritPrototype(SlideLoopImages,LoopImages);
+	SlideLoopImages.prototype.changeImg=function(){
+		console.log('SlideLoopImages');
+	}
+	LoopImages.prototype.getImageArrays=function(){
+		console.log('getImageArrays');
+	}
+	SlideLoopImages.prototype.changeContainer=function(){
+		console.log('changeContainer');
+	}
+	var slide=new SlideLoopImages();
+	console.log(slide);
+	</script>
+	
+	
+</body>
+</html>

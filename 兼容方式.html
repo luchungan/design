@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>兼容方式</title>
+	<script>
+	function isNum(){
+		var charCode=event.keyCode;
+		//alert(charCode)
+		if(charCode<48 || charCode>59){
+			alert('您输入的不是数字');
+			preventDefault(event)
+		}
+	}
+	</script>
+</head>
+<body>
+	<button id="btn">btn</button>
+	<input type="text" onkeypress="isNum()">
+	<script>
+	function addEvent(dom ,type ,fn){
+		if(dom.addEventListener){
+
+			dom.addEventListener(type ,fn ,false)
+		}else if(dom.attachEvent){
+
+			//兼容IE
+			dom.attachEvent('on'+type ,fn)
+		}else {
+
+			//兼容不支持dom2
+			dom['on'+type]=fn;
+		}
+	}
+	function getEvent(event){
+		return event || window.event;
+	}
+	function getTarget(event){
+		var event = getEvent(event);
+		return event || srcEvent;
+	}
+	var preventDefault=function(event){
+		var event=getEvent(event);
+		if(event.preventDefault){
+			event.preventDefault()
+		}else{
+			event.returnValue=false;
+		}
+	}
+	function $(id){
+		return document.getElementById(id);
+	}
+	addEvent($('btn') ,'click' ,function(){
+		console.log('click')
+	})
+	function return_value(event){
+		var charCode=event.keyCode;
+		if(charCode<48||charcode>75){
+			alert('NO_NUM')
+		}
+	}
+	
+	</script>
+</body>
+</html>
