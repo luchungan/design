@@ -24,4 +24,35 @@ function travel(dir, callback) {
     }
 
 }
-travel('cp11',(pathname)=>{console.log(pathname)})
+// travel('cp11',(pathname)=>{console.log(pathname)})
+
+
+//异步方式实现
+function traval1(dir,callback,finish){
+    fs.readdir(dir,(err,files)=>{
+        (
+            function next(i){
+                if(i<files.length){
+                    var pathname = path.join(dir,files[i])
+                    fs.stat(pathname,(err,stats)=>{
+                        if(stats.isDirectory()){
+                            traval1(pathname,callback,()=>{
+                                next(i+1)
+                            })
+                        }else{
+                            callback(pathname,()=>{
+                                next(i+1)
+                            })
+                        }
+                    })
+                }else{
+                    finish && finish()
+                }
+            }
+        )(0)
+    })
+}
+traval1('cp11',(file,cb)=>{
+    console.log(file)
+    cb()
+},()=>{console.log('读取完成')})
